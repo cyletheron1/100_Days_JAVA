@@ -1,0 +1,235 @@
+name: Generate 100-Day Skeleton
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Create and run generation script
+        run: |
+          set -euo pipefail
+          cat > create_days.sh <<'SCRIPT'
+#!/usr/bin/env bash
+set -euo pipefail
+DAYS_DIR=./days
+mkdir -p "$DAYS_DIR"
+
+for i in $(seq -w 1 100); do
+  case $i in
+    001) title="Setup-and-Java-basics" ;;
+    002) title="Primitive-types-control-flow" ;;
+    003) title="Objects-and-classes" ;;
+    004) title="Constructors-and-encapsulation" ;;
+    005) title="Inheritance-and-polymorphism" ;;
+    006) title="Interfaces-and-abstract-classes" ;;
+    007) title="Enums-and-annotations" ;;
+    008) title="Collections-introduction" ;;
+    009) title="Lists-and-ArrayList" ;;
+    010) title="Sets-and-HashSet-TreeSet" ;;
+    011) title="Maps-and-HashMap-TreeMap" ;;
+    012) title="Iterators-and-for-each" ;;
+    013) title="Generics" ;;
+    014) title="Exceptions-and-error-handling" ;;
+    015) title="IO-basics" ;;
+    016) title="File-IO" ;;
+    017) title="Serialization-and-deserialization" ;;
+    018) title="Streams-API" ;;
+    019) title="Lambda-expressions" ;;
+    020) title="Functional-interfaces-and-method-refs" ;;
+    021) title="Optional-and-null-safety" ;;
+    022) title="Date-Time-API" ;;
+    023) title="Formatting-and-parsing" ;;
+    024) title="Threads-basics" ;;
+    025) title="Executors-and-thread-pools" ;;
+    026) title="Synchronization-and-locks" ;;
+    027) title="CompletableFuture" ;;
+    028) title="Parallel-streams" ;;
+    029) title="NIO-basics" ;;
+    030) title="HTTP-client" ;;
+    031) title="Sockets-and-networking" ;;
+    032) title="JDBC-and-database-basics" ;;
+    033) title="SQL-CRUD-in-Java" ;;
+    034) title="Unit-testing-with-JUnit" ;;
+    035) title="Mocking-with-Mockito" ;;
+    036) title="Logging-with-SLF4J-Logback" ;;
+    037) title="Build-systems-Gradle-Maven" ;;
+    038) title="Dependency-Injection-basics" ;;
+    039) title="Design-patterns-Singleton-Factory" ;;
+    040) title="Strategy-and-Observer-patterns" ;;
+    041) title="Builder-and-Adapter-patterns" ;;
+    042) title="Decorator-and-Facade" ;;
+    043) title="Command-and-Iterator-patterns" ;;
+    044) title="MVC-basics" ;;
+    045) title="GUI-JavaFX-or-Swing" ;;
+    046) title="File-watcher-WatchService" ;;
+    047) title="Reflection" ;;
+    048) title="Annotation-processing" ;;
+    049) title="Java-Platform-Module-System" ;;
+    050) title="Classloaders" ;;
+    051) title="Memory-management-and-GC" ;;
+    052) title="Performance-tuning" ;;
+    053) title="Profiling-tools" ;;
+    054) title="Security-basics" ;;
+    055) title="Cryptography-basics" ;;
+    056) title="Advanced-IO-and-streams" ;;
+    057) title="Regular-expressions" ;;
+    058) title="Internationalization" ;;
+    059) title="JSON-processing-Jackson" ;;
+    060) title="XML-parsing" ;;
+    061) title="REST-services-with-Spring-Boot" ;;
+    062) title="Spring-Core-DI" ;;
+    063) title="Spring-Data-JPA" ;;
+    064) title="Spring-Security-basics" ;;
+    065) title="WebSockets" ;;
+    066) title="Reactive-programming-Reactor" ;;
+    067) title="Testing-microservices" ;;
+    068) title="Docker-for-Java" ;;
+    069) title="CI-CD-for-Java-projects" ;;
+    070) title="Logging-correlation-and-tracing" ;;
+    071) title="Metrics-and-Micrometer" ;;
+    072) title="Scheduling-and-cron" ;;
+    073) title="File-uploads-and-downloads" ;;
+    074) title="Email-with-Java" ;;
+    075) title="Image-processing" ;;
+    076) title="CSV-processing" ;;
+    077) title="PDF-generation" ;;
+    078) title="Command-line-apps" ;;
+    079) title="Command-line-parsing" ;;
+    080) title="Process-management-and-OS-integration" ;;
+    081) title="JNI-and-native-interop-intro" ;;
+    082) title="Embedded-DB-H2" ;;
+    083) title="Caching-Caffeine-Redis" ;;
+    084) title="Message-brokers-Kafka-intro" ;;
+    085) title="gRPC-basics" ;;
+    086) title="GraphQL-basics" ;;
+    087) title="Code-generation" ;;
+    088) title="Advanced-generics" ;;
+    089) title="Immutability-and-value-objects" ;;
+    090) title="Clean-code-practices" ;;
+    091) title="Refactoring-exercises" ;;
+    092) title="Open-source-contribution-workflow" ;;
+    093) title="Packaging-and-fat-jars" ;;
+    094) title="Publishing-to-Maven-Central" ;;
+    095) title="Using-Lombok" ;;
+    096) title="Kotlin-interoperability" ;;
+    097) title="Java-preview-features" ;;
+    098) title="Capstone-planning" ;;
+    099) title="Capstone-development" ;;
+    100) title="Capstone-presentation-and-documentation" ;;
+  esac
+
+  folder="${DAYS_DIR}/${i}-${title}"
+  mkdir -p "${folder}/src/main/java/com/cyletheron/day${i}"
+  mkdir -p "${folder}/src/test/java/com/cyletheron/day${i}"
+  mkdir -p "${folder}/exercises"
+  mkdir -p "${folder}/solutions"
+  mkdir -p "${folder}/assets"
+
+  # README
+  cat > "${folder}/README.md" <<EOF
+# Day ${i} — ${title//-/ }
+Objectives:
+- ...
+EOF
+
+  # meta
+  # ${i#0} removes a leading zero for the day number in YAML metadata
+  cat > "${folder}/.meta.yaml" <<EOF
+day: ${i#0}
+title: "${title//-/ }"
+tags: []
+difficulty: "beginner"
+time_estimate_mins: 30
+EOF
+
+  # sample App.java
+  cat > "${folder}/src/main/java/com/cyletheron/day${i}/App.java" <<EOF
+package com.cyletheron.day${i};
+
+public class App {
+    public static void main(String[] args) {
+        String name = args.length > 0 ? args[0] : "World";
+        System.out.println("Hello, " + name + " from Day ${i} - ${title//-/ }!");
+    }
+}
+EOF
+
+  # placeholder test
+  cat > "${folder}/src/test/java/com/cyletheron/day${i}/AppTest.java" <<EOF
+package com.cyletheron.day${i};
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AppTest {
+    @Test
+    void smoke() {
+        assertTrue(true);
+    }
+}
+EOF
+
+done
+
+# optional top-level README and .gitignore (will not overwrite if they already exist)
+if [ ! -f README.md ]; then
+  cat > README.md <<'RD'
+# 100 Days of Java
+
+This repository contains a day-by-day learning path. Each day lives under days/
+and contains example code, tests, exercises, and metadata.
+RD
+fi
+
+if [ ! -f .gitignore ]; then
+  cat > .gitignore <<'GI'
+# Java
+*.class
+*.jar
+*.war
+*.ear
+/build/
+/out/
+/bin/
+*.log
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+GI
+fi
+
+echo "100-day skeleton created under ./days"
+SCRIPT
+          chmod +x create_days.sh
+          ./create_days.sh
+
+      - name: Commit and push generated skeleton
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add 100-day skeleton (generated by workflow)"
+            git push
+          fi
